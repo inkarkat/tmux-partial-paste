@@ -1,36 +1,5 @@
 #!/bin/bash
 
-fail() {
-    tmux display-message "ERROR: tmux-partial-paste ${1:-encountered an unspecified problem.}"
-    exit 3
-}
-
-get_tmux_option() {
-	local option="${1:?}"; shift
-	local default_value="${1?}"; shift
-	local isAllowEmpty="$1"; shift
-	local option_value
-	if ! option_value="$(tmux show-option -gv "$option" 2>/dev/null)"; then
-	    # tmux fails if the user option is unset.
-	    echo "$default_value"
-	elif [ -z "$option_value" ] && [ "$isAllowEmpty" ]; then
-	    # XXX: tmux 3.0a returns an empty string for a user option that is unset, but does not fail any longer.
-	    tmux show-options -g | grep --quiet --fixed-strings --line-regexp "$option " && return
-	    printf %s "$default_value"
-	else
-	    printf %s "${option_value:-$default_value}"
-	fi
-}
-
-keydef()
-{
-    local table="$1"; shift
-    local key="$1"; shift
-    [ "$key" ] || return 0
-
-    tmux bind-key ${table:+-T "$table"} "$key" "$@"
-}
-
 readonly projectDir="$([ "${BASH_SOURCE[0]}" ] && cd "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 [ -d "$projectDir" ] || fail 'cannot determine script directory!'
 printf -v quotedScriptDir '%q' "${projectDir}/scripts"
