@@ -9,10 +9,16 @@ If you have a series of commands, or several data values, you can paste them one
 
 - <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>]</kbd> <br>
   Paste the first line of the input file and remove that line from the file.
+- <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>Ctrl</kbd>+<kbd>]</kbd> <br>
+  Paste the first line of the input file and <kbd>Enter</kbd>, and remove that
+  line from the file.
   The next paste will paste the following line.
   The next built-in paste (prefix + ]) will repeat the paste of that line.
-- <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>Ctrl</kbd>+<kbd>v</kbd> <br>
+- <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>v</kbd> <br>
   Paste the first line of the system clipboard and remove that line from it.
+- <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>Ctrl</kbd>+<kbd>v</kbd> <br>
+  Paste the first line of the system clipboard and <kbd>Enter</kbd>, and remove
+  that line from it.
 
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
@@ -37,9 +43,11 @@ Reload tmux environment with: `$ tmux source-file ~/.tmux.conf`. You should now 
 ### Configuration
 
 - `@partialpaste_inputfile` &mdash; filespec (default `~/.tmux-partial-paste`) where the input is taken from.
-- `@partialpaste_inputfile_key` &mdash; tmux key for pasting from the input file
+- `@partialpaste_inputfile_incomplete_key` &mdash; tmux key for pasting from the input file
+- `@partialpaste_inputfile_entered_key` &mdash; tmux key for pasting from the input file with appended Enter
 - `@partialpaste_clipboard_command` &mdash; command-line to read the clipboard contents from / write to.
-- `@partialpaste_clipboard_key` &mdash; tmux key for pasting from the system clipboard
+- `@partialpaste_clipboard_incomplete_key` &mdash; tmux key for pasting from the system clipboard
+- `@partialpaste_clipboard_entered_key` &mdash; tmux key for pasting from the system clipboard with appended Enter
 - `@partialpaste_table` &mdash; tmux client key table for the above keys; you can use this to define a sequence of keys to trigger the command
 
 ### License

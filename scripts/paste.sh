@@ -1,7 +1,10 @@
 #!/bin/bash
 
+typeset additionalPasteCommand=()
+[ "${1?}" ] && additionalPasteCommand=(\; send-key Enter); shift
 inputFilespec="${1?}"; shift
 typeset -a clipboardAccessCommand=("$@")
+
 if [ -z "$inputFilespec" ]; then
     inputFilespec="$(mktemp --tmpdir "$(basename -- "$0")-XXXXXX" 2>/dev/null || echo "${TMPDIR:-/tmp}/$(basename -- "$0").$$$RANDOM")"
 
@@ -71,4 +74,5 @@ case $? in
 esac
 
 tmux set-buffer -b partialpaste "$firstLine" \; \
-    paste-buffer -b partialpaste
+    paste-buffer -b partialpaste \
+    "${additionalPasteCommand[@]}"

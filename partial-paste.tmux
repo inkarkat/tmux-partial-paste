@@ -43,14 +43,20 @@ printf -v quotedInputFilespec %q "$(get_tmux_option '@partialpaste_inputfile' ~/
 clipboardAccessCommand="$(get_tmux_option '@partialpaste_clipboard_command' 'xsel --clipboard')"
 
 partialpaste_table="$(get_tmux_option '@partialpaste_table' 'C-l' t)"
-partialpaste_inputfile_key="$(get_tmux_option '@partialpaste_inputfile_key' ']' t)"
-partialpaste_clipboard_key="$(get_tmux_option '@partialpaste_inputfile_key' 'C-v' t)"
+partialpaste_inputfile_incomplete_key="$(get_tmux_option '@partialpaste_inputfile_incomplete_key' ']' t)"
+partialpaste_inputfile_entered_key="$(get_tmux_option '@partialpaste_inputfile_entered_key' 'C-]' t)"
+partialpaste_clipboard_incomplete_key="$(get_tmux_option '@partialpaste_clipboard_incomplete_key' 'v' t)"
+partialpaste_clipboard_entered_key="$(get_tmux_option '@partialpaste_clipboard_entered_key' 'C-v' t)"
 
 if [ -n "$partialpaste_table" ]; then
     tmux bind-key "$partialpaste_table" switch-client -T partialpaste
 fi
 
-keydef "${partialpaste_table:+partialpaste}" "$partialpaste_inputfile_key" \
-    run-shell "${quotedScriptDir}/paste.sh $quotedInputFilespec"
-keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_key" \
-    run-shell "${quotedScriptDir}/paste.sh '' $clipboardAccessCommand"
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_inputfile_incomplete_key" \
+    run-shell "${quotedScriptDir}/paste.sh '' $quotedInputFilespec"
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_inputfile_entered_key" \
+    run-shell "${quotedScriptDir}/paste.sh t $quotedInputFilespec"
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_incomplete_key" \
+    run-shell "${quotedScriptDir}/paste.sh '' '' $clipboardAccessCommand"
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_entered_key" \
+    run-shell "${quotedScriptDir}/paste.sh t '' $clipboardAccessCommand"
