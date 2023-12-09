@@ -22,10 +22,10 @@ if [ -n "$partialpaste_table" ]; then
 fi
 
 keydef "${partialpaste_table:+partialpaste}" "$partialpaste_inputfile_incomplete_key" \
-    run-shell "${quotedScriptDir}/paste.sh '' $quotedInputFilespec"
+    run-shell "${quotedScriptDir}/paste.sh --file $quotedInputFilespec"
 keydef "${partialpaste_table:+partialpaste}" "$partialpaste_inputfile_entered_key" \
-    run-shell "${quotedScriptDir}/paste.sh t $quotedInputFilespec"
+    run-shell "${quotedScriptDir}/paste.sh --enter --file $quotedInputFilespec"
 keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_incomplete_key" \
-    run-shell "${quotedScriptDir}/paste.sh '' '' $clipboardAccessCommand"
+    run-shell "${quotedScriptDir}/paste.sh --clipboard $clipboardAccessCommand"
 keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_entered_key" \
-    run-shell "${quotedScriptDir}/paste.sh t '' $clipboardAccessCommand"
+    run-shell "${quotedScriptDir}/paste.sh --enter --clipboard $clipboardAccessCommand"

@@ -4,10 +4,20 @@ readonly scriptDir="$([ "${BASH_SOURCE[0]}" ] && dirname -- "${BASH_SOURCE[0]}" 
 [ -d "$scriptDir" ] || { echo >&2 'ERROR: Cannot determine script directory!'; exit 3; }
 source "${scriptDir}/helpers.sh"
 
-typeset additionalPasteCommand=()
-[ "${1?}" ] && additionalPasteCommand=(\; send-key Enter); shift
-inputFilespec="${1?}"; shift
+inputFilespec=
 typeset -a clipboardAccessCommand=("$@")
+typeset additionalPasteCommand=()
+while [ $# -ne 0 ]
+do
+    case "$1" in
+	--help|-h|-\?)	shift; printUsage "$0"; exit 0;;
+	--enter)	shift; additionalPasteCommand=(\; send-key Enter);;
+	--file)		shift; inputFilespec="${1?}"; shift;;
+	--clipboard)	shift; clipboardAccessCommand=("$@"); set --; break;;
+	-*)		{ echo "ERROR: Unknown option \"$1\"!"; echo; printUsage "$0"; } >&2; exit 2;;
+	*)		break;;
+    esac
+done
 
 inputWhat="$inputFilespec"
 if [ -z "$inputFilespec" ]; then
