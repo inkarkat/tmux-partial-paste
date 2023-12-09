@@ -29,3 +29,14 @@ keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_incomplete
     run-shell "${quotedScriptDir}/paste.sh --clipboard $clipboardAccessCommand"
 keydef "${partialpaste_table:+partialpaste}" "$partialpaste_clipboard_entered_key" \
     run-shell "${quotedScriptDir}/paste.sh --enter --clipboard $clipboardAccessCommand"
+
+
+tmux-is-at-least 3.0 || exit 0
+
+partialpaste_queriedfile_incomplete_key="$(get_tmux_option '@partialpaste_queriedfile_incomplete_key' 'f' t)"
+partialpaste_queriedfile_entered_key="$(get_tmux_option '@partialpaste_queriedfile_entered_key' 'C-f' t)"
+
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_queriedfile_incomplete_key" \
+    run-shell "${quotedScriptDir}/paste.sh --option @partialpaste_queriedfile"
+keydef "${partialpaste_table:+partialpaste}" "$partialpaste_queriedfile_entered_key" \
+    run-shell "${quotedScriptDir}/paste.sh --enter --option @partialpaste_queriedfile"
