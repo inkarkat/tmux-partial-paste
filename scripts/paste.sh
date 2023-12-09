@@ -1,5 +1,9 @@
 #!/bin/bash
 
+readonly scriptDir="$([ "${BASH_SOURCE[0]}" ] && dirname -- "${BASH_SOURCE[0]}" || exit 3)"
+[ -d "$scriptDir" ] || { echo >&2 'ERROR: Cannot determine script directory!'; exit 3; }
+source "${scriptDir}/helpers.sh"
+
 typeset additionalPasteCommand=()
 [ "${1?}" ] && additionalPasteCommand=(\; send-key Enter); shift
 inputFilespec="${1?}"; shift
@@ -9,7 +13,7 @@ if [ -z "$inputFilespec" ]; then
     inputFilespec="$(mktemp --tmpdir "$(basename -- "$0")-XXXXXX" 2>/dev/null || echo "${TMPDIR:-/tmp}/$(basename -- "$0").$$$RANDOM")"
 
     </dev/null "${clipboardAccessCommand[@]}" > "$inputFilespec" \
-	|| tmux display-message "ERROR: Could not read from clipboard via ${clipboardAccessCommand[*]}"
+	|| fail "could not read from clipboard via ${clipboardAccessCommand[*]}"
 
     if [ -s "$inputFilespec" ]; then
 	finally()
@@ -20,7 +24,7 @@ if [ -z "$inputFilespec" ]; then
 		printf '\n'
 	    fi \
 		| "${clipboardAccessCommand[@]}" >/dev/null 2>&1 \
-		    || tmux display-message "ERROR: Could not write to clipboard via ${clipboardAccessCommand[*]}"
+		    || fail "could not write to clipboard via ${clipboardAccessCommand[*]}"
 	    [ "${DEBUG:-}" ] || rm -f -- "$inputFilespec" 2>/dev/null
 	}
 	trap 'finally' EXIT
@@ -74,7 +78,7 @@ case $? in
 	;;
     1)	tmux display-message 'Break in input';;
     2)	tmux display-message 'Input fully pasted';;
-    *)	tmux display-message "Unexpected exit status $?";;
+    *)	fail "encountered an unexpected exit status $?";;
 esac
 
 tmux set-buffer -b partialpaste "$firstLine" \; \
