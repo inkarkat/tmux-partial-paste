@@ -49,6 +49,10 @@ b
 N; s/^\n//
 /^$/b eatLeadingEmpty
 :extractFirst
+/\\$/ {
+    N
+    b extractFirst
+}
 w /dev/stdout
 $Q 2	# No more input lines at all.
 s/.*//

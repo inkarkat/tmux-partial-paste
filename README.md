@@ -5,6 +5,8 @@ _Tmux plugin for pasting line by line._
 This plugin offers pasting (and consuming) only the first line of a file / the system clipboard.
 If you have a series of commands, or several data values, you can paste them one by one until the input source is exhausted.
 
+Lines with line continuation (i.e. a trailing backslash) are pasted all at once; the line continuation is kept.
+
 ### Key bindings
 
 - <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>]</kbd> <br>
