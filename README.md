@@ -51,7 +51,8 @@ Reload tmux environment with: `$ tmux source-file ~/.tmux.conf`. You should now 
 - `@partialpaste_clipboard_incomplete_key` &mdash; tmux key for pasting from the system clipboard
 - `@partialpaste_clipboard_entered_key` &mdash; tmux key for pasting from the system clipboard with appended Enter
 - `@partialpaste_table` &mdash; tmux client key table for the above keys; you can use this to define a sequence of keys to trigger the command
-- `@partialpaste_display_duration` &mdash; duration in milliseconds for the plugin's status messages; use 0 to completely suppress those
+- `@partialpaste_info_duration` &mdash; duration in milliseconds for the plugin's info messages (break in input, fully pasted); use 0 to completely suppress those
+- `@partialpaste_error_duration` &mdash; duration in milliseconds for the plugin's error messages (empty clipboard); use 0 to completely suppress those
 
 ### License
 

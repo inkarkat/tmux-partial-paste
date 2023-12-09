@@ -9,11 +9,13 @@ typeset additionalPasteCommand=()
 inputFilespec="${1?}"; shift
 typeset -a clipboardAccessCommand=("$@")
 
+inputWhat="$inputFilespec"
 if [ -z "$inputFilespec" ]; then
+    inputWhat='clipboard'
     inputFilespec="$(mktemp --tmpdir "$(basename -- "$0")-XXXXXX" 2>/dev/null || echo "${TMPDIR:-/tmp}/$(basename -- "$0").$$$RANDOM")"
 
     </dev/null "${clipboardAccessCommand[@]}" > "$inputFilespec" \
-	|| fail "could not read from clipboard via ${clipboardAccessCommand[*]}"
+	|| fail "could not read from $inputWhat via ${clipboardAccessCommand[*]}"
 
     if [ -s "$inputFilespec" ]; then
 	finally()
@@ -24,17 +26,17 @@ if [ -z "$inputFilespec" ]; then
 		printf '\n'
 	    fi \
 		| "${clipboardAccessCommand[@]}" >/dev/null 2>&1 \
-		    || fail "could not write to clipboard via ${clipboardAccessCommand[*]}"
+		    || fail "could not write to $inputWhat via ${clipboardAccessCommand[*]}"
 	    [ "${DEBUG:-}" ] || rm -f -- "$inputFilespec" 2>/dev/null
 	}
 	trap 'finally' EXIT
     else
 	[ "${DEBUG:-}" ] || rm -f -- "$inputFilespec" 2>/dev/null
-	display_message 'Empty clipboard'
+	display_message error "Empty ${inputWhat}"
 	exit 0
     fi
 elif [ ! -s "$inputFilespec" ]; then
-    display_message 'Nothing to paste'
+    display_message error "Nothing in $inputWhat"
     exit 0
 fi
 
@@ -74,12 +76,12 @@ N; s/^\n//
 case $? in
     0)	if [ -z "$firstLine" ]; then
 	    # Input consisted of just empty line(s).
-	    display_message 'Nothing to paste'
+	    display_message error "Nothing in $inputWhat"
 	    exit
 	fi
 	;;
-    1)	display_message 'Break in input';;
-    2)	display_message 'Input fully pasted';;
+    1)	display_message info 'Break in input';;
+    2)	display_message info "$inputWhat fully pasted";;
     *)	fail "encountered an unexpected exit status $?";;
 esac
 

@@ -69,10 +69,12 @@ get_tmux_option() {
 }
 
 display_message() {
+    local severity="${1:?}"; shift
     local message="${1:?}"; shift
+    typeset -A durations=([info]=500 [error]=2000)
 
     local saved_display_time=$(get_tmux_option display-time 750)
-    local display_duration=$(get_tmux_option @partialpaste_display_duration 500 t)
+    local display_duration=$(get_tmux_option "@partialpaste_${severity}_duration" ${durations["$severity"]} t)
 
     [ -z "$display_duration" ] || tmux set-option -gq display-time "$display_duration"
 
