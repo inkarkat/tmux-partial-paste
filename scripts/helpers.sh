@@ -1,3 +1,5 @@
+#!/bin/bash source-this-script
+
 # The last grep is required to remove non-digits from version such as "3.0a".
 tmux_version="$(tmux -V | cut -d ' ' -f 2 | grep -Eo '[0-9\.]+')"
 tmux-is-at-least() {
@@ -64,6 +66,19 @@ get_tmux_option() {
 	else
 	    printf %s "${option_value:-$default_value}"
 	fi
+}
+
+display_message() {
+    local message="${1:?}"; shift
+
+    local saved_display_time=$(get_tmux_option display-time 750)
+    local display_duration=$(get_tmux_option @partialpaste_display_duration 500 t)
+
+    [ -z "$display_duration" ] || tmux set-option -gq display-time "$display_duration"
+
+    [ "$display_duration" = 0 ] || tmux display-message "$message"
+
+    tmux set-option -gq display-time "$saved_display_time"
 }
 
 keydef()

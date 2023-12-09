@@ -30,10 +30,12 @@ if [ -z "$inputFilespec" ]; then
 	trap 'finally' EXIT
     else
 	[ "${DEBUG:-}" ] || rm -f -- "$inputFilespec" 2>/dev/null
-	exec tmux display-message 'Empty clipboard'
+	display_message 'Empty clipboard'
+	exit 0
     fi
 elif [ ! -s "$inputFilespec" ]; then
-    exec tmux display-message 'Nothing to paste'
+    display_message 'Nothing to paste'
+    exit 0
 fi
 
 firstLine="$(sed -i -e '
@@ -72,12 +74,12 @@ N; s/^\n//
 case $? in
     0)	if [ -z "$firstLine" ]; then
 	    # Input consisted of just empty line(s).
-	    tmux display-message 'Nothing to paste'
+	    display_message 'Nothing to paste'
 	    exit
 	fi
 	;;
-    1)	tmux display-message 'Break in input';;
-    2)	tmux display-message 'Input fully pasted';;
+    1)	display_message 'Break in input';;
+    2)	display_message 'Input fully pasted';;
     *)	fail "encountered an unexpected exit status $?";;
 esac
 
