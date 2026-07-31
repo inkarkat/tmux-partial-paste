@@ -29,6 +29,11 @@ Lines with line continuation (i.e. a trailing backslash) are pasted all at once;
 - <kbd>prefix</kbd> <kbd>Ctrl</kbd>+<kbd>l</kbd> <kbd>Ctrl</kbd>+<kbd>f</kbd> <br>
   As above, but also paste <kbd>Enter</kbd>.
 
+### Dependencies
+
+* Bash
+* [inkarkat/shell-debugging](https://github.com/inkarkat/shell-debugging) for debugging (optional)
+
 ### Installation with [Tmux Plugin Manager](https://github.com/tmux-plugins/tpm) (recommended)
 
 Add plugin to the list of TPM plugins in `.tmux.conf`:
