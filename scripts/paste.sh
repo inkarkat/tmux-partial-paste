@@ -60,11 +60,11 @@ if [ -z "$inputFilespec" ]; then
 	    fi \
 		| "${clipboardAccessCommand[@]}" >/dev/null 2>&1 \
 		    || fail "could not write to $inputWhat via ${clipboardAccessCommand[*]}"
-	    ${DEBUG:+debugcommand --} rm -f -- "$inputFilespec" 2>/dev/null
+	    ${DEBUG:+debugcommand --module cleanup --} rm -f -- "$inputFilespec" 2>/dev/null
 	}
 	trap 'finally' EXIT
     else
-	${DEBUG:+debugcommand --} rm -f -- "$inputFilespec" 2>/dev/null
+	${DEBUG:+debugcommand --module cleanup --} rm -f -- "$inputFilespec" 2>/dev/null
 	display_message error "Empty ${inputWhat}"
 	exit 0
     fi
